@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#contents {
+  @apply flex flex-col;
+  height: 100vh;
+
+  header {
+    @apply px-5 p-3 font-bold text-gray-600 text-3xl shadow;
+  }
+
+  #body {
+    @apply flex flex-1;
+    overflow-y: hidden;
+
+    #menu {
+      overflow-y: auto;
+    }
+
+    main {
+      overflow-y: auto;
+      @apply p-5 border flex-1;
+      h1 {
+        @apply font-bold text-gray-600 text-3xl border-b border-gray-400 pb-2 mb-5;
+      }
+    }
+  }
+}
+
+a {
+  @apply text-blue-500;
+}
+
+div.result-box {
+  h5 {
+    @apply flex items-center gap-2 font-medium text-lg;
+  }
+  pre {
+    @apply mt-2 p-3 bg-green-100 rounded-lg;
+  }
+}
