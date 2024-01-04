@@ -24,10 +24,8 @@
         <CopySolid size="sm"/>
       </Button>
     </h5>
-    <div class="flex items-center gap-2">
-      <p class="border px-3 py-2 rounded-lg bg-blue-50 grow">
-        {text}
-      </p>
+    <div class="result-text">
+      <pre class="border px-3 py-2 rounded-lg bg-blue-50 grow">{@html text}</pre>
     </div>
   </div>
 {/if}
@@ -42,3 +40,10 @@
   </Toast>
 {/if}
 
+<style lang="postcss">
+  .result-text {
+    @apply flex items-center gap-2 overflow-x-auto;
+    line-break: anywhere;
+    word-break: break-all;
+  }
+</style>
