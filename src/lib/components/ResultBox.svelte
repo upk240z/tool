@@ -42,7 +42,7 @@
 
 <style lang="postcss">
   .result-text {
-    @apply flex items-center gap-2 overflow-x-auto;
+    @apply flex items-center gap-2 overflow-x-auto text-sm;
     line-break: anywhere;
     word-break: break-all;
   }
