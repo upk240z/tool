@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vite dev",
+    "dev:netlify": "netlify dev",
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -11,6 +12,7 @@
   },
   "devDependencies": {
     "@googlemaps/js-api-loader": "^1.16.2",
+    "@netlify/functions": "^2.4.1",
     "@sveltejs/adapter-auto": "^3.0.0",
     "@sveltejs/adapter-netlify": "^3.0.1",
     "@sveltejs/kit": "^2.0.0",
@@ -25,6 +27,7 @@
     "flowbite-svelte": "^0.44.21",
     "flowbite-svelte-icons": "^0.4.5",
     "js-base64": "^3.7.5",
+    "netlify-cli": "^17.11.1",
     "postcss": "^8.4.32",
     "qrcode": "^1.5.3",
     "svelte": "^4.2.7",
