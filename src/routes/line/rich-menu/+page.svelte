@@ -9,7 +9,6 @@
   type ObjectData = {[i: string]: any}
 
   let token = ''
-  let secret = ''
   let promise: Promise<void>
   let menus: ObjectData[] = []
   let defaultId = ''
@@ -25,7 +24,7 @@
   let json = ''
 
   const init = () => {
-    if (token.length == 0 || secret.length == 0) {
+    if (token.length == 0) {
       return
     }
 
@@ -37,7 +36,6 @@
     return {
       'Content-Type': 'application/json',
       'line-token': token,
-      'line-secret': secret,
     }
   }
 
@@ -93,14 +91,12 @@
 
   onMount(() => {
     token = getItem('line-token', '')
-    secret = getItem('line-secret', '')
     init()
   })
 
   onDestroy(() => {
-    if (token.length > 0 && secret.length > 0) {
+    if (token.length > 0) {
       setItem('line-token', token)
-      setItem('line-secret', secret)
     }
   })
 
@@ -222,9 +218,6 @@
   <div class="flex gap-3">
     <div class="w-full">
       <FloatingLabelInput style="outlined" bind:value={token} on:change={init}>Access token</FloatingLabelInput>
-    </div>
-    <div class="w-full">
-      <FloatingLabelInput style="outlined" bind:value={secret} on:change={init}>Channel secret</FloatingLabelInput>
     </div>
   </div>
 </section>

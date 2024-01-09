@@ -21,10 +21,8 @@ export const cors = (req: Request): Response | null => {
 
 export const lineClient = (req: Request) => {
   const token = req.headers.get('line-token')
-  const secret = req.headers.get('line-secret')
 
   return new LineClient({
     token: token!,
-    secret: secret!,
   })
 }

@@ -1,26 +1,18 @@
 export type ClientOptions = {
   token: string,
-  secret: string,
 }
 
 type ObjectData = {[i: string]: any}
 
-type RichMenuResponse = {
-  richmenus: ObjectData[]
-}
-
 export default class LineClient {
   private readonly token: string
-  private readonly secret: string
 
   constructor(options: ClientOptions) {
     this.token = options.token
-    this.secret = options.secret
   }
 
   private headers = (): ObjectData => {
     return {
-      // 'Content-Type': 'application/json',
       'Authorization' : `Bearer ${this.token}`
     }
   }
