@@ -1,7 +1,7 @@
 <script lang="ts">
   import {onMount} from 'svelte'
   import {
-    Fileupload, Label, Spinner, Button, Badge, Alert, FloatingLabelInput, Modal, Dropzone
+    Fileupload, Spinner, Button, Badge, Alert, FloatingLabelInput, Modal, Dropzone
   } from 'flowbite-svelte'
   import {InfoCircleSolid, CloseOutline, CopySolid, PlusOutline, TrashBinOutline} from 'flowbite-svelte-icons'
   import {parseFile, saveDefinition, getDefinitions, deleteDefinition} from '$lib/fld'
@@ -16,6 +16,8 @@
   let spinnerVisible = false
   let open = false
   let definitions: FILE_DATA[] = []
+  let openDefinitionModal = false
+  let selectedDefinition: FILE_DATA = {type: '', json: '', length: 0}
   let inputFileType = ''
   let refDefineFile: FileList
 
@@ -122,6 +124,16 @@
     deleteDefinition(type)
     definitions = getDefinitions()
   }
+
+  const onClickDefinition = (type: string) => {
+    const filtered = definitions.filter((definition) => {
+      return definition.type == type
+    })
+    if (filtered.length > 0) {
+      selectedDefinition = filtered[0]
+    }
+    openDefinitionModal = true
+  }
 </script>
 
 <h1>Fixed length data</h1>
@@ -138,11 +150,15 @@
     <div class="mt-3 grid grid-cols-2 gap-2">
       {#each definitions as definition}
         <div class="border border-gray-400 rounded-lg p-3 inline-flex items-center gap-2">
-          <Button color="red" size="sm" on:click={() => {onClickDelete(definition.type)}}>
+          <Button on:click={() => {onClickDefinition(definition.type)}}
+            size="xs" class="bg-green-300 border border-green-800 text-green-800 hover:text-white hover:bg-blue-600">
+            {definition.type}
+          </Button>
+          <span class="ml-1 text-base grow">{definition.length} bytes</span>
+          <Button color="red" size="sm"
+                  on:click={() => {onClickDelete(definition.type)}}>
             <TrashBinOutline size="sm"/>
           </Button>
-          <Badge border color="green" class="text-base">{definition.type}</Badge>
-          <span class="ml-1 text-base">{definition.length} bytes</span>
         </div>
       {/each}
     </div>
@@ -235,6 +251,17 @@
     </div>
   </Modal>
 </form>
+
+<Modal outsideclose
+  bind:open={openDefinitionModal} title={selectedDefinition.type}>
+  <div class="relative">
+    <pre class="border rounded-lg bg-green-100 p-3">{selectedDefinition.json}</pre>
+    <Button on:click={() => copyClip(selectedDefinition.json)}
+      size="sm" class="absolute top-[-0.5rem] right-[-0.5rem]">
+      <CopySolid size="sm"/>
+    </Button>
+  </div>
+</Modal>
 
 <style lang="postcss">
   table {

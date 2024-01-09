@@ -1,5 +1,11 @@
-export const copyClip = async (text: string): Promise<void> => {
+import {toastMessage} from '$lib/store'
+
+export const copyClip = async (text: string, message = 'Copied', ttl = 3000): Promise<void> => {
   await navigator.clipboard.writeText(text)
+  toastMessage.set({
+    text: message,
+    ttl,
+  })
 }
 
 export const hash = async (algorithm: string, input: string): Promise<string> => {

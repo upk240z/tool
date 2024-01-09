@@ -1,19 +1,32 @@
 <script lang="ts">
   import '../app.postcss'
   import {onDestroy} from 'svelte'
-  import {Spinner} from 'flowbite-svelte'
-  import {UserSettingsSolid} from 'flowbite-svelte-icons'
+  import type {Unsubscriber} from 'svelte/store'
+  import {Spinner, Toast} from 'flowbite-svelte'
+  import {UserSettingsSolid, CheckCircleSolid} from 'flowbite-svelte-icons'
   import {MENU_LINKS} from '$lib/constants'
-  import {loading} from '$lib/store'
+  import {loading, toastMessage} from '$lib/store'
 
   let visibleLoading = false
+  let toast = ''
 
-  const unsubscribe = loading.subscribe(visible => {
+  const unsubscribes: Unsubscriber[] = []
+
+  unsubscribes.push(loading.subscribe(visible => {
     visibleLoading = visible
-  })
+  }))
+
+  unsubscribes.push(toastMessage.subscribe(item => {
+    toast = item.text
+    setTimeout(() => {
+      toast = ''
+    }, item.ttl)
+  }))
 
   onDestroy(() => {
-    unsubscribe()
+    unsubscribes.forEach(unsubscribe => {
+      unsubscribe()
+    })
   })
 </script>
 
@@ -35,6 +48,16 @@
     </main>
   </div>
 </div>
+
+{#if toast.length > 0}
+  <Toast color="green" class="fixed right-10 bottom-10">
+    <svelte:fragment slot="icon">
+      <CheckCircleSolid class="w-5 h-5" />
+      <span class="sr-only">Check icon</span>
+    </svelte:fragment>
+    {toast}
+  </Toast>
+{/if}
 
 {#if visibleLoading}
   <div class="loading">

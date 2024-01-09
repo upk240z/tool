@@ -14,3 +14,11 @@ export const setItem = (key: string, value: any) => {
 }
 
 export const loading = writable<boolean>(false)
+
+export type ToastMessageData = {
+  text: string,
+  ttl: number,
+}
+export const toastMessage = writable<ToastMessageData>({
+  text: '', ttl: 0
+})
