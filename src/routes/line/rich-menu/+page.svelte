@@ -250,7 +250,7 @@
   {/await}
 </section>
 
-<Modal title={modalTitle} bind:open outsideclose autoclose>
+<Modal title={modalTitle} bind:open outsideclose>
   <div class="flex flex-col gap-3 items-center">
     {#if modalImageUri.length > 0}
       <img src={modalImageUri} alt="">
