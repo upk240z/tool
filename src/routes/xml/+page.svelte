@@ -1,17 +1,18 @@
 <script lang="ts">
   import { Textarea, Alert } from 'flowbite-svelte'
   import { InfoCircleOutline } from 'flowbite-svelte-icons'
-  import YAML from 'yaml'
+  import { XMLParser } from 'fast-xml-parser'
   import ResultBox from '$lib/components/ResultBox.svelte'
 
-  let yamlText = ''
+  let inputText = ''
   let json = ''
   let php = ''
   let error = ''
 
-  $: if (yamlText.length > 0) {
+  $: if (inputText.length > 0) {
     try {
-      const parsed = YAML.parse(yamlText)
+      const parser = new XMLParser()
+      const parsed = parser.parse(inputText)
       json = JSON.stringify(parsed, null, 2)
       php = json
         .replaceAll(': ', ' => ')
@@ -31,11 +32,11 @@
   }
 </script>
 
-<h1>YAML</h1>
+<h1>XML</h1>
 
 <section>
   <div class="flex flex-col gap-3">
-    <Textarea placeHolder="YAML text" rows="4" bind:value={yamlText}/>
+    <Textarea placeHolder="XML" rows="4" bind:value={inputText}/>
     {#if error.length > 0}
       <Alert border>
         <InfoCircleOutline slot="icon"/>
