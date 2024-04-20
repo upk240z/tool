@@ -78,7 +78,20 @@ export default class LineClient {
     if (result === null) {
       return []
     } else {
-      return (result.richmenus as ObjectData[]).sort((a, b) => {
+      const _aliases = await this.fetchJSON('https://api.line.me/v2/bot/richmenu/alias/list')
+      const aliases = _aliases.aliases as ObjectData[]
+      const _results = result.richmenus as ObjectData[]
+      const results = _results.map((menu: ObjectData) => {
+        const filtered = aliases.filter((alias: ObjectData) => alias.richMenuId == menu.richMenuId)
+        if (filtered.length > 0) {
+          menu.alias = filtered[0].richMenuAliasId
+        } else {
+          menu.alias = null
+        }
+        return menu
+      })
+
+      return results.sort((a, b) => {
         if (a['name'] > b['name']) {
           return 1;
         } else if (a['name'] == b['name']) {
@@ -168,5 +181,14 @@ export default class LineClient {
       console.log('@@@ delete response error')
       console.log(response.statusText)
     }
+  }
+
+  public async updateAlias(menuId: string, alias: string) {
+    const url = `https://api.line.me/v2/bot/richmenu/alias/${alias}`
+    await this.post(
+      url,
+      `{"richMenuId": "${menuId}"}`,
+      'application/json'
+    )
   }
 }

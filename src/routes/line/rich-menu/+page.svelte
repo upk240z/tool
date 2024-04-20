@@ -1,7 +1,11 @@
 <script lang="ts">
   import {onDestroy, onMount} from 'svelte'
-  import {Button, FloatingLabelInput, Modal, Spinner, Dropzone, Textarea} from 'flowbite-svelte'
-  import {TrashBinOutline, CheckSolid, EyeOutline, PlusOutline, UploadOutline, CopySolid} from 'flowbite-svelte-icons'
+  import {
+    Button, FloatingLabelInput, Modal, Spinner, Dropzone, Textarea, ButtonGroup, Input
+  } from 'flowbite-svelte'
+  import {
+    TrashBinOutline, CheckSolid, EyeOutline, PlusOutline, UploadOutline, CopySolid, ArrowUpOutline
+  } from 'flowbite-svelte-icons'
   import {PUBLIC_NETLIFY_FUNCTION_BASE} from '$env/static/public'
   import {getItem, setItem, loading} from '$lib/store'
   import {copyClip} from '$lib/utils'
@@ -210,6 +214,27 @@
 
     promise = getMenus()
   }
+
+  const updateAlias = async (menu: {[i: string]: any}) => {
+    loading.set(true)
+    const url = `${PUBLIC_NETLIFY_FUNCTION_BASE}/.netlify/functions/alias/${menu.alias}`
+
+    const response = await fetch(url, {
+      method: 'POST',
+      mode: 'cors',
+      headers: headers(),
+      body: JSON.stringify({richMenuId: menu.richMenuId})
+    })
+
+    loading.set(false)
+
+    if (!response.ok) {
+      console.log(response.statusText)
+      return
+    }
+
+    promise = getMenus()
+  }
 </script>
 
 <h1>LINE rich menu</h1>
@@ -232,19 +257,24 @@
           {menu.richMenuId}
         </Button>
         <span class="border border-gray-400 p-2 rounded-lg" class:default={menu.richMenuId === defaultId}>
-        {menu.name}
-      </span>
-        <div class="flex gap-2">
-          <Button size="sm" color="red" on:click={() => {deleteMenu(menu.richMenuId)}}>
-            <TrashBinOutline size="sm"/>
+          {menu.name}
+        </span>
+        <Input bind:value={menu.alias}>
+          <Button slot="right" size="sm" color="blue" on:click={() => { updateAlias(menu) }}>
+            <ArrowUpOutline size="sm"/>
           </Button>
-          <Button size="sm" color="green" on:click={() => {setDefault(menu.richMenuId)}}>
-            <CheckSolid size="sm"/>
+        </Input>
+        <ButtonGroup>
+          <Button class="py-3" color="yellow" on:click={() => { openModal(menu) }}>
+            <EyeOutline/>
           </Button>
-          <Button size="sm" color="yellow" on:click={() => { openModal(menu) }}>
-            <EyeOutline size="sm"/>
+          <Button class="py-3" color="green" on:click={() => {setDefault(menu.richMenuId)}}>
+            <CheckSolid/>
           </Button>
-        </div>
+          <Button class="py-3" color="red" on:click={() => {deleteMenu(menu.richMenuId)}}>
+            <TrashBinOutline/>
+          </Button>
+        </ButtonGroup>
       {/each}
     </div>
   {/await}
@@ -297,8 +327,8 @@
 
 <style lang="postcss">
   .menus {
-    @apply grid grid-cols-3 gap-3 items-center;
-    grid-template-columns: auto 1fr auto;
+    @apply grid grid-cols-4 gap-3 items-center;
+    grid-template-columns: auto 3fr 1fr auto;
   }
 
   .default {
