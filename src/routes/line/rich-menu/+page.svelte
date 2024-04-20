@@ -4,7 +4,8 @@
     Button, FloatingLabelInput, Modal, Spinner, Dropzone, Textarea, ButtonGroup, Input
   } from 'flowbite-svelte'
   import {
-    TrashBinOutline, CheckSolid, EyeOutline, PlusOutline, UploadOutline, CopySolid, ArrowUpOutline
+    TrashBinOutline, CheckSolid, EyeOutline, PlusOutline, UploadOutline, CopySolid, ArrowUpOutline,
+    AnnotationOutline
   } from 'flowbite-svelte-icons'
   import {PUBLIC_NETLIFY_FUNCTION_BASE} from '$env/static/public'
   import {getItem, setItem, loading} from '$lib/store'
@@ -26,6 +27,10 @@
     base64: '',
   }
   let json = ''
+  let isOpenJson = false
+
+  const richMenuIdList: {[i: string]: string} = {}
+  let partOfRichMenuJson = ''
 
   const init = () => {
     if (token.length == 0) {
@@ -54,6 +59,12 @@
 
     if (response.ok) {
       menus = await response.json() as object[]
+      menus.forEach(menu => {
+        if (menu.alias) {
+          richMenuIdList[menu.alias] = menu.richMenuId
+        }
+      })
+      console.log(richMenuIdList)
     } else {
       console.log(response.statusText)
     }
@@ -109,6 +120,11 @@
     modalBody = JSON.stringify(menu, null, 2)
     getImage(menu.richMenuId)
     open = true
+  }
+
+  const openJson = () => {
+    partOfRichMenuJson = '"richMenus": ' + JSON.stringify(richMenuIdList, null, 2)
+    isOpenJson = true
   }
 
   const prevent = (e: Event) => { e.preventDefault() }
@@ -297,6 +313,16 @@
   </div>
 </Modal>
 
+<Modal title="Part of RichMenus JSON" bind:open={isOpenJson} outsideclose>
+  <div class="relative">
+    <pre class="p-3 rounded-lg bg-green-100">{partOfRichMenuJson}</pre>
+    <Button on:click={() => copyClip(partOfRichMenuJson)}
+            size="sm" color="green" class="absolute top-0 right-0">
+      <CopySolid size="sm"/>
+    </Button>
+  </div>
+</Modal>
+
 <form method="post" on:submit={onSubmit}>
   <Modal title="new rich menu" bind:open={isOpenForm}>
     <div class="flex flex-col gap-3">
@@ -320,6 +346,9 @@
 </form>
 
 <div class="fixed right-10 bottom-10 flex flex-col gap-2">
+  <Button pill={true} color="green" class="!p-3" on:click={() => openJson()}>
+    <AnnotationOutline size="lg"/>
+  </Button>
   <Button pill={true} class="!p-3" on:click={() => openForm()}>
     <PlusOutline size="lg"/>
   </Button>
