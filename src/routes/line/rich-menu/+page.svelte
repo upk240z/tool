@@ -5,7 +5,7 @@
   } from 'flowbite-svelte'
   import {
     TrashBinOutline, CheckSolid, EyeOutline, PlusOutline, UploadOutline, CopySolid, ArrowUpOutline,
-    AnnotationOutline
+    AnnotationOutline, FaceGrinOutline
   } from 'flowbite-svelte-icons'
   import {PUBLIC_NETLIFY_FUNCTION_BASE} from '$env/static/public'
   import {getItem, setItem, loading} from '$lib/store'
@@ -64,7 +64,6 @@
           richMenuIdList[menu.alias] = menu.richMenuId
         }
       })
-      console.log(richMenuIdList)
     } else {
       console.log(response.statusText)
     }
@@ -346,6 +345,9 @@
 </form>
 
 <div class="fixed right-10 bottom-10 flex flex-col gap-2">
+  <Button pill={true} color="yellow" class="!p-3" on:click={() => init()}>
+    <FaceGrinOutline size="lg"/>
+  </Button>
   <Button pill={true} color="green" class="!p-3" on:click={() => openJson()}>
     <AnnotationOutline size="lg"/>
   </Button>
