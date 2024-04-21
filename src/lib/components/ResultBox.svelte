@@ -1,6 +1,6 @@
 <script lang="ts">
   import {Button} from 'flowbite-svelte'
-  import { CopySolid } from 'flowbite-svelte-icons'
+  import { FileCopyOutline } from 'flowbite-svelte-icons'
   import {copyClip} from '$lib/utils'
 
   export let label: string
@@ -12,7 +12,7 @@
     <h5 class="font-medium">
       {label}
       <Button class="ml-2" on:click={() => copyClip(text)} size="sm">
-        <CopySolid size="sm"/>
+        <FileCopyOutline size="sm"/>
       </Button>
     </h5>
     <div class="result-text">

@@ -3,7 +3,7 @@
   import {
     Fileupload, Spinner, Button, Badge, Alert, FloatingLabelInput, Modal, Dropzone
   } from 'flowbite-svelte'
-  import {InfoCircleSolid, CloseOutline, CopySolid, PlusOutline, TrashBinOutline} from 'flowbite-svelte-icons'
+  import {InfoCircleSolid, CloseOutline, FileCopyOutline, PlusOutline, TrashBinOutline} from 'flowbite-svelte-icons'
   import {parseFile, saveDefinition, getDefinitions, deleteDefinition} from '$lib/fld'
   import type {ParseResult, ColumnInfo, FILE_DATA} from '$lib/fld'
   import {copyClip} from '$lib/utils'
@@ -201,7 +201,7 @@
         <FloatingLabelInput style="outlined" bind:value={filterText}>Keyword</FloatingLabelInput>
       </div>
       <Button color="blue" on:click={onClickCopy}>
-        <CopySolid size="sm"/>
+        <FileCopyOutline size="sm"/>
       </Button>
       <Button color="green" on:click={() => filterText = ''}>
         <CloseOutline size="sm"/>
@@ -258,7 +258,7 @@
     <pre class="border rounded-lg bg-green-100 p-3">{selectedDefinition.json}</pre>
     <Button on:click={() => copyClip(selectedDefinition.json)}
       size="sm" class="absolute top-[-0.5rem] right-[-0.5rem]">
-      <CopySolid size="sm"/>
+      <FileCopyOutline size="sm"/>
     </Button>
   </div>
 </Modal>

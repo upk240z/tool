@@ -1,5 +1,5 @@
 import type { Context } from '@netlify/functions'
-import {cors, headers, lineClient} from './lib'
+import {cors, error, lineClient, success} from './lib'
 
 export default async (req: Request, context: Context) => {
   const corsRes = cors(req)
@@ -11,20 +11,14 @@ export default async (req: Request, context: Context) => {
     const parameters = JSON.parse(body)
     const richMenuId = await client.createRichMenu(parameters.json)
     await client.uploadRichMenuImage(richMenuId, parameters.image)
-    return new Response(JSON.stringify({richMenuId}), {
-      headers
-    })
+    return success({richMenuId})
   } else if (req.method == 'DELETE') {
     const richMenuId = req.url.split('/').pop()
     if (richMenuId) {
       await client.deleteRichMenu(richMenuId)
-      return new Response('{}', {
-        headers
-      })
+      return success({})
     }
   }
 
-  return new Response('not found rich menu', {
-    status: 404
-  })
+  return error('not found rich menu', 404)
 }

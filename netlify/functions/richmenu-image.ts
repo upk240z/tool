@@ -1,5 +1,5 @@
 import type { Context } from '@netlify/functions'
-import {headers, lineClient, cors} from './lib'
+import {headers, lineClient, cors, error} from './lib'
 
 export default async (req: Request, context: Context) => {
   const corsRes = cors(req)
@@ -17,7 +17,5 @@ export default async (req: Request, context: Context) => {
     }
   }
 
-  return new Response('not found rich menu image', {
-    status: 404
-  })
+  return error('not found rich menu image', 404)
 }

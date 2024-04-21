@@ -1,5 +1,5 @@
 import type { Context } from '@netlify/functions'
-import {headers, lineClient, cors} from './lib'
+import {lineClient, cors, success, error} from './lib'
 
 export default async (req: Request, context: Context) => {
   const corsRes = cors(req)
@@ -7,14 +7,14 @@ export default async (req: Request, context: Context) => {
 
   const richMenuId = req.url.split('/').pop()
   if (richMenuId) {
-    const client = lineClient(req)
-    await client.setDefaultRichMenu(richMenuId)
-    return new Response('{}', {
-      headers
-    })
+    try {
+      const client = lineClient(req)
+      await client.setDefaultRichMenu(richMenuId)
+      return success({})
+    } catch (err: any) {
+      return error(err.toString())
+    }
   }
 
-  return new Response('not found rich menu', {
-    status: 404
-  })
+  return error('not found rich menu', 404)
 }

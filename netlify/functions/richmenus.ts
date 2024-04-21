@@ -1,5 +1,5 @@
 import type { Context } from '@netlify/functions'
-import {cors, headers, lineClient} from './lib'
+import {cors, lineClient, success} from './lib'
 
 export default async (req: Request, context: Context) => {
   const corsRes = cors(req)
@@ -7,8 +7,10 @@ export default async (req: Request, context: Context) => {
 
   const client = lineClient(req)
   const results = await client.richMenus()
+  const defaultMenu = await client.defaultRichMenuId()
 
-  return new Response(JSON.stringify(results), {
-    headers
-  })
+  return success(results.map(menu => {
+    menu.isDefault = menu.richMenuId == defaultMenu.richMenuId
+    return menu
+  }))
 }

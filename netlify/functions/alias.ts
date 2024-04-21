@@ -1,5 +1,5 @@
 import type { Context } from '@netlify/functions'
-import {cors, headers, lineClient} from './lib'
+import {cors, error, lineClient, success} from './lib'
 
 export default async (req: Request, context: Context) => {
   const corsRes = cors(req)
@@ -9,16 +9,16 @@ export default async (req: Request, context: Context) => {
   if (req.method == 'POST') {
     const alias = req.url.split('/').pop()
     if (alias) {
-      const body = await new Response(req.body).text()
-      const parameters = JSON.parse(body)
-      await client.updateAlias(parameters.richMenuId, alias)
-      return new Response(JSON.stringify(parameters), {
-        headers
-      })
+      try {
+        const body = await new Response(req.body).text()
+        const parameters = JSON.parse(body)
+        await client.updateAlias(parameters.richMenuId, alias)
+        return success(parameters)
+      } catch (err: any) {
+        return error(err.toString())
+      }
     }
   }
 
-  return new Response('{}', {
-    headers
-  })
+  return error('unknown')
 }

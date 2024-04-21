@@ -1,5 +1,7 @@
 import LineClient from './line-client'
 
+export type ObjectData = {[i: string]: any}
+
 export const headers = {
   'Content-Type': 'application/json',
   'Access-Control-Allow-Origin': '*',
@@ -17,6 +19,20 @@ export const cors = (req: Request): Response | null => {
   }
 
   return null
+}
+
+export const success = (output: ObjectData) => {
+  return new Response(JSON.stringify(output), {
+    status: 200,
+    headers
+  })
+}
+
+export const error = (message: string, status: number = 400) => {
+  return new Response(JSON.stringify({message}), {
+    status: 400,
+    headers
+  })
 }
 
 export const lineClient = (req: Request) => {

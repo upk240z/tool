@@ -4,19 +4,18 @@
     Button, FloatingLabelInput, Modal, Spinner, Dropzone, Textarea, ButtonGroup, Input
   } from 'flowbite-svelte'
   import {
-    TrashBinOutline, CheckSolid, EyeOutline, PlusOutline, UploadOutline, CopySolid, ArrowUpOutline,
-    AnnotationOutline, FaceGrinOutline
+    TrashBinOutline, EyeOutline, PlusOutline, UploadOutline, FileCopyOutline, ArrowUpOutline,
+    AnnotationOutline, RefreshOutline, CheckOutline
   } from 'flowbite-svelte-icons'
   import {PUBLIC_NETLIFY_FUNCTION_BASE} from '$env/static/public'
   import {getItem, setItem, loading} from '$lib/store'
-  import {copyClip} from '$lib/utils'
+  import {copyClip, setMessage} from '$lib/utils'
 
   type ObjectData = {[i: string]: any}
 
   let token = ''
   let promise: Promise<void>
   let menus: ObjectData[] = []
-  let defaultId = ''
   let open = false
   let modalTitle = ''
   let modalBody = ''
@@ -38,7 +37,6 @@
     }
 
     promise = getMenus()
-    getDefaultId()
   }
 
   const headers = () => {
@@ -64,23 +62,6 @@
           richMenuIdList[menu.alias] = menu.richMenuId
         }
       })
-    } else {
-      console.log(response.statusText)
-    }
-  }
-
-  const getDefaultId = async () => {
-    const url = `${PUBLIC_NETLIFY_FUNCTION_BASE}/.netlify/functions/default-richmenu-id`
-
-    const response = await fetch(url, {
-      method: 'GET',
-      mode: 'cors',
-      headers: headers(),
-    })
-
-    if (response.ok) {
-      const result = await response.json() as ObjectData
-      defaultId = result.richMenuId
     } else {
       console.log(response.statusText)
     }
@@ -150,8 +131,10 @@
       body: JSON.stringify(parameters)
     })
 
-    if (!response.ok) {
-      console.log(response.statusText)
+    if (response.ok) {
+      setMessage('created')
+    } else {
+      setMessage(response.statusText)
     }
 
     loading.set(false)
@@ -203,12 +186,13 @@
     })
     loading.set(false)
 
-    if (!response.ok) {
-      console.log(response.statusText)
+    if (response.ok) {
+      setMessage('set default')
+    } else {
+      setMessage(response.statusText)
       return
     }
 
-    defaultId = menuId
     promise = getMenus()
   }
 
@@ -222,8 +206,10 @@
     })
     loading.set(false)
 
-    if (!response.ok) {
-      console.log(response.statusText)
+    if (response.ok) {
+      setMessage('deleted')
+    } else {
+      setMessage(response.statusText)
       return
     }
 
@@ -233,7 +219,6 @@
   const updateAlias = async (menu: {[i: string]: any}) => {
     loading.set(true)
     const url = `${PUBLIC_NETLIFY_FUNCTION_BASE}/.netlify/functions/alias/${menu.alias}`
-
     const response = await fetch(url, {
       method: 'POST',
       mode: 'cors',
@@ -241,13 +226,14 @@
       body: JSON.stringify({richMenuId: menu.richMenuId})
     })
 
-    loading.set(false)
-
-    if (!response.ok) {
-      console.log(response.statusText)
-      return
+    if (response.ok) {
+      setMessage('alias updated')
+    } else {
+      const json = await response.json()
+      setMessage(json.message)
     }
 
+    loading.set(false)
     promise = getMenus()
   }
 </script>
@@ -271,7 +257,7 @@
         <Button color="blue" size="sm" class="py-2 text-base" on:click={() => copyClip(menu.richMenuId)}>
           {menu.richMenuId}
         </Button>
-        <span class="border border-gray-400 p-2 rounded-lg" class:default={menu.richMenuId === defaultId}>
+        <span class="border border-gray-400 p-2 rounded-lg" class:default={menu.isDefault}>
           {menu.name}
         </span>
         <Input bind:value={menu.alias}>
@@ -284,7 +270,7 @@
             <EyeOutline/>
           </Button>
           <Button class="py-3" color="green" on:click={() => {setDefault(menu.richMenuId)}}>
-            <CheckSolid/>
+            <CheckOutline/>
           </Button>
           <Button class="py-3" color="red" on:click={() => {deleteMenu(menu.richMenuId)}}>
             <TrashBinOutline/>
@@ -306,7 +292,7 @@
       <pre class="border px-3 py-2 rounded-lg bg-blue-50 grow text-sm">{@html modalBody}</pre>
       <Button on:click={() => copyClip(modalBody)}
         size="sm" color="green" class="absolute top-0 right-0">
-        <CopySolid size="sm"/>
+        <FileCopyOutline size="sm"/>
       </Button>
     </div>
   </div>
@@ -317,7 +303,7 @@
     <pre class="p-3 rounded-lg bg-green-100">{partOfRichMenuJson}</pre>
     <Button on:click={() => copyClip(partOfRichMenuJson)}
             size="sm" color="green" class="absolute top-0 right-0">
-      <CopySolid size="sm"/>
+      <FileCopyOutline size="sm"/>
     </Button>
   </div>
 </Modal>
@@ -346,7 +332,7 @@
 
 <div class="fixed right-10 bottom-10 flex flex-col gap-2">
   <Button pill={true} color="yellow" class="!p-3" on:click={() => init()}>
-    <FaceGrinOutline size="lg"/>
+    <RefreshOutline size="lg"/>
   </Button>
   <Button pill={true} color="green" class="!p-3" on:click={() => openJson()}>
     <AnnotationOutline size="lg"/>

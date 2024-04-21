@@ -1,7 +1,7 @@
 <script lang="ts">
   import {onDestroy, onMount} from 'svelte'
   import {Badge, Button, FloatingLabelInput} from 'flowbite-svelte'
-  import {CopySolid} from 'flowbite-svelte-icons'
+  import {FileCopyOutline} from 'flowbite-svelte-icons'
   import Map from '$lib/map'
   import {copyClip} from '$lib/utils'
   import {setItem, getItem} from '$lib/store'
@@ -56,7 +56,7 @@
     <Badge large color="blue">Lng</Badge>
     <span>{pin.lng}</span>
     <Button size="sm" on:click={() => copyClip(pin.lat + ' ' + pin.lng)}>
-      <CopySolid size="sm"/>
+      <FileCopyOutline size="sm"/>
     </Button>
   </div>
 </section>

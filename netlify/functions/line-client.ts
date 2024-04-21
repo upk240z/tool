@@ -1,8 +1,8 @@
+import type {ObjectData} from './lib'
+
 export type ClientOptions = {
   token: string,
 }
-
-type ObjectData = {[i: string]: any}
 
 export default class LineClient {
   private readonly token: string
@@ -17,7 +17,7 @@ export default class LineClient {
     }
   }
 
-  private async fetch(url: string): Promise<Response | null> {
+  private async fetch(url: string): Promise<Response> {
     try {
       const options: ObjectData = {
         method: 'GET',
@@ -28,23 +28,26 @@ export default class LineClient {
       if (response.ok) {
         return response
       } else {
-        console.log('@@@ fetch response error')
+        console.log('@@@ fetch error')
         console.log(response.statusText)
-        return null
+        throw new Error(response.statusText)
       }
     } catch (err) {
-      console.log('@@@ fetch error')
+      throw err
+    }
+  }
+
+  private async fetchJSON(url: string): Promise<any> {
+    try {
+      const response = await this.fetch(url)
+      return  await response.json()
+    } catch (err) {
       console.log(err)
       return null
     }
   }
 
-  private async fetchJSON(url: string): Promise<any> {
-    const response = await this.fetch(url)
-    return response ? await response.json() : null
-  }
-
-  private async post(url: string, body: any = null, type: string | null = null): Promise<Response | null> {
+  private async post(url: string, body: any = null, type: string | null = null): Promise<Response> {
     try {
       const headers = this.headers()
       if (type) {
@@ -62,14 +65,12 @@ export default class LineClient {
       if (response.ok) {
         return response
       } else {
-        console.log('@@@ post response error')
+        console.log('@@@ post error')
         console.log(response.statusText)
-        return null
+        throw new Error(response.statusText)
       }
     } catch (err) {
-      console.log('@@@ post error')
-      console.log(err)
-      return null
+      throw err
     }
   }
 
@@ -156,10 +157,6 @@ export default class LineClient {
       buffer,
       file.type
     )
-
-    if (response === null) {
-      return ''
-    }
 
     const {richMenuId} = await response.json() as ObjectData
     return richMenuId

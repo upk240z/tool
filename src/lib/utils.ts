@@ -1,11 +1,15 @@
 import {toastMessage} from '$lib/store'
 
-export const copyClip = async (text: string, message = 'Copied', ttl = 3000): Promise<void> => {
-  await navigator.clipboard.writeText(text)
+export const setMessage = (message: string, ttl: number = 3000) => {
   toastMessage.set({
     text: message,
     ttl,
   })
+}
+
+export const copyClip = async (text: string, message = 'Copied', ttl = 3000): Promise<void> => {
+  await navigator.clipboard.writeText(text)
+  setMessage(message, ttl)
 }
 
 export const hash = async (algorithm: string, input: string): Promise<string> => {
