@@ -1,6 +1,6 @@
 <script lang="ts">
   import {Button} from 'flowbite-svelte'
-  import {CheckSolid, CloseSolid} from 'flowbite-svelte-icons'
+  import {CheckOutline, CloseOutline} from 'flowbite-svelte-icons'
   import Bingo from '$lib/bingo'
 
   let bingo = new Bingo()
@@ -28,11 +28,11 @@
 <div class="fixed right-5 bottom-5 flex flex-col gap-2">
   <Button color="blue" pill={true} class="py-4"
           on:click={onTake}>
-    <CheckSolid/>
+    <CheckOutline/>
   </Button>
   <Button pill={true} class="py-4 bg-orange-400"
     on:click={() => bingo = new Bingo()}>
-    <CloseSolid/>
+    <CloseOutline/>
   </Button>
 </div>
 

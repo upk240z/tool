@@ -30,7 +30,7 @@ export default class LineClient {
       } else {
         console.log('@@@ fetch error')
         console.log(response.statusText)
-        throw new Error(response.statusText)
+        return response
       }
     } catch (err) {
       throw err
@@ -40,7 +40,7 @@ export default class LineClient {
   private async fetchJSON(url: string): Promise<any> {
     try {
       const response = await this.fetch(url)
-      return  await response.json()
+      return await response.json()
     } catch (err) {
       console.log(err)
       return null
@@ -67,7 +67,7 @@ export default class LineClient {
       } else {
         console.log('@@@ post error')
         console.log(response.statusText)
-        throw new Error(response.statusText)
+        return response
       }
     } catch (err) {
       throw err
@@ -182,7 +182,7 @@ export default class LineClient {
 
   public async updateAlias(menuId: string, alias: string) {
     const url = `https://api.line.me/v2/bot/richmenu/alias/${alias}`
-    await this.post(
+    return await this.post(
       url,
       `{"richMenuId": "${menuId}"}`,
       'application/json'

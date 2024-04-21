@@ -12,8 +12,12 @@ export default async (req: Request, context: Context) => {
       try {
         const body = await new Response(req.body).text()
         const parameters = JSON.parse(body)
-        await client.updateAlias(parameters.richMenuId, alias)
-        return success(parameters)
+        const response = await client.updateAlias(parameters.richMenuId, alias)
+        if (response.ok) {
+          return success(parameters)
+        } else {
+          return error(response.statusText)
+        }
       } catch (err: any) {
         return error(err.toString())
       }

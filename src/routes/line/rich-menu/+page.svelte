@@ -46,24 +46,41 @@
     }
   }
 
+  const fetchJSON = async (method: 'GET' | 'POST' | 'DELETE', func: string, parameters: {[i: string]: any} = {}) => {
+    try {
+      const url = `${PUBLIC_NETLIFY_FUNCTION_BASE}/.netlify/functions/${func}`
+      const option: {[i: string]: any} = {
+        method,
+        mode: 'cors',
+        headers: headers(),
+      }
+      if (method == 'POST') {
+        option.body = JSON.stringify(parameters)
+      }
+      const response = await fetch(url, option)
+
+      if (response.ok) {
+        return await response.json()
+      } else {
+        const errorJson = await response.json()
+        setMessage(errorJson.message ? errorJson.message : response.statusText)
+      }
+    } catch (err: any) {
+      setMessage(err.toString())
+    }
+
+    return null
+  }
+
   const getMenus = async (): Promise<void> => {
-    const url = `${PUBLIC_NETLIFY_FUNCTION_BASE}/.netlify/functions/richmenus`
-
-    const response = await fetch(url, {
-      method: 'GET',
-      mode: 'cors',
-      headers: headers(),
-    })
-
-    if (response.ok) {
-      menus = await response.json() as object[]
+    const result = await fetchJSON('GET', 'richmenus')
+    if (result) {
+      menus = result as any[]
       menus.forEach(menu => {
         if (menu.alias) {
           richMenuIdList[menu.alias] = menu.richMenuId
         }
       })
-    } else {
-      console.log(response.statusText)
     }
   }
 
@@ -98,7 +115,7 @@
   const openModal = async (menu: {[i: string]: any}) => {
     modalTitle = menu.name
     modalBody = JSON.stringify(menu, null, 2)
-    getImage(menu.richMenuId)
+    await getImage(menu.richMenuId)
     open = true
   }
 
@@ -117,24 +134,13 @@
   const onSubmit = async (e: Event) => {
     loading.set(true)
     prevent(e)
-    const url = `${PUBLIC_NETLIFY_FUNCTION_BASE}/.netlify/functions/richmenu`
-
     const parameters = {
       image: uploadFile,
       json,
     }
-
-    const response = await fetch(url, {
-      method: 'POST',
-      mode: 'cors',
-      headers: headers(),
-      body: JSON.stringify(parameters)
-    })
-
-    if (response.ok) {
+    const result = await fetchJSON('POST', 'richmenu', parameters)
+    if (result) {
       setMessage('created')
-    } else {
-      setMessage(response.statusText)
     }
 
     loading.set(false)
@@ -178,61 +184,30 @@
 
   const setDefault = async (menuId: string) => {
     loading.set(true)
-    const url = `${PUBLIC_NETLIFY_FUNCTION_BASE}/.netlify/functions/richmenu-default/${menuId}`
-    const response = await fetch(url, {
-      method: 'POST',
-      mode: 'cors',
-      headers: headers(),
-    })
-    loading.set(false)
-
-    if (response.ok) {
+    const result = await fetchJSON('POST', `richmenu-default/${menuId}`)
+    if (result) {
       setMessage('set default')
-    } else {
-      setMessage(response.statusText)
-      return
     }
-
+    loading.set(false)
     promise = getMenus()
   }
 
   const deleteMenu = async (menuId: string) => {
     loading.set(true)
-    const url = `${PUBLIC_NETLIFY_FUNCTION_BASE}/.netlify/functions/richmenu/${menuId}`
-    const response = await fetch(url, {
-      method: 'DELETE',
-      mode: 'cors',
-      headers: headers(),
-    })
-    loading.set(false)
-
-    if (response.ok) {
+    const result = await fetchJSON('DELETE', `richmenu/${menuId}`)
+    if (result) {
       setMessage('deleted')
-    } else {
-      setMessage(response.statusText)
-      return
     }
-
+    loading.set(false)
     promise = getMenus()
   }
 
   const updateAlias = async (menu: {[i: string]: any}) => {
     loading.set(true)
-    const url = `${PUBLIC_NETLIFY_FUNCTION_BASE}/.netlify/functions/alias/${menu.alias}`
-    const response = await fetch(url, {
-      method: 'POST',
-      mode: 'cors',
-      headers: headers(),
-      body: JSON.stringify({richMenuId: menu.richMenuId})
-    })
-
-    if (response.ok) {
+    const result = await fetchJSON('POST', `alias/${menu.alias}`, {richMenuId: menu.richMenuId})
+    if (result) {
       setMessage('alias updated')
-    } else {
-      const json = await response.json()
-      setMessage(json.message)
     }
-
     loading.set(false)
     promise = getMenus()
   }
