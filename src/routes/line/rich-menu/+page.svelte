@@ -115,8 +115,8 @@
   const openModal = async (menu: {[i: string]: any}) => {
     modalTitle = menu.name
     modalBody = JSON.stringify(menu, null, 2)
-    await getImage(menu.richMenuId)
     open = true
+    await getImage(menu.richMenuId)
   }
 
   const openJson = () => {
@@ -225,7 +225,7 @@
 
 <section class="mt-5">
   {#await promise}
-    <div class="p-5 text-center"><Spinner color="blue"/></div>
+    <div class="p-5 text-center"><Spinner color="blue" size={20}/></div>
   {:then _}
     <div class="menus">
       {#each menus as menu}
@@ -261,7 +261,7 @@
     {#if modalImageUri.length > 0}
       <img src={modalImageUri} alt="">
     {:else}
-      <Spinner color="blue"/>
+      <Spinner color="blue" size={12}/>
     {/if}
     <div class="relative w-full">
       <pre class="border px-3 py-2 rounded-lg bg-blue-50 grow text-sm">{@html modalBody}</pre>
