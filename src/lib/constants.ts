@@ -12,4 +12,5 @@ export const MENU_LINKS = [
   {name: 'Bingo', href: '/bingo', class: 'text-base'},
   {name: 'Map', href: '/map', class: 'text-base'},
   {name: 'LINE rich menu', href: '/line/rich-menu', class: 'text-base'},
+  {name: 'Client', href: '/client', class: 'text-base'},
 ]
