@@ -6,7 +6,7 @@
   import {InfoCircleSolid, CloseOutline, FileCopyOutline, PlusOutline, TrashBinOutline} from 'flowbite-svelte-icons'
   import {parseFile, saveDefinition, getDefinitions, deleteDefinition} from '$lib/fld'
   import type {ParseResult, ColumnInfo, FILE_DATA} from '$lib/fld'
-  import {copyClip} from '$lib/utils'
+  import {copyClip, prevent} from '$lib/utils'
 
   let parseResult: ParseResult | null = null
 
@@ -20,8 +20,6 @@
   let selectedDefinition: FILE_DATA = {type: '', json: '', length: 0}
   let inputFileType = ''
   let refDefineFile: FileList
-
-  const prevent = (e: Event) => { e.preventDefault() }
 
   onMount(() => {
     definitions = getDefinitions()

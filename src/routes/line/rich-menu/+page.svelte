@@ -9,7 +9,7 @@
   } from 'flowbite-svelte-icons'
   import {PUBLIC_NETLIFY_FUNCTION_BASE} from '$env/static/public'
   import {getItem, setItem, loading} from '$lib/store'
-  import {copyClip, setMessage} from '$lib/utils'
+  import {copyClip, setMessage, prevent} from '$lib/utils'
 
   type ObjectData = {[i: string]: any}
 
@@ -123,8 +123,6 @@
     partOfRichMenuJson = '"richMenus": ' + JSON.stringify(richMenuIdList, null, 2)
     isOpenJson = true
   }
-
-  const prevent = (e: Event) => { e.preventDefault() }
 
   const openForm = () => {
     uploadFile = {type: '', base64: ''}

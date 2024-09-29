@@ -30,3 +30,5 @@ export const buildQuery = (params: {[i: string]: any}): string => {
   }
   return array.join('&')
 }
+
+export const prevent = (e: Event) => { e.preventDefault() }
