@@ -35,6 +35,7 @@
       marker = L.marker([pos.lat, pos.lng], {
         draggable: true,
         title: 'My marker',
+        icon: L.icon({iconUrl: 'marker-icon.png'}),
       })
       marker.on('dragend', updateMapInfo)
       marker.addTo(map)
