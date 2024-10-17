@@ -8,14 +8,16 @@
 
   let map: Map
   let pin = {lat: 0, lng: 0}
+  let zoom = 0
   let apiKey = ''
 
-  const writePinPosition = () => {
+  const updateMapInfo = () => {
     const pos = map.pinPosition()
     if (pos) {
       pin.lat = pos.lat()
       pin.lng = pos.lng()
     }
+    zoom = map.zoom()
   }
 
   const init = async () => {
@@ -25,8 +27,8 @@
       center: {lat: info.lat, lng: info.lng},
       zoom: info.zoom
     }, apiKey)
-    await map.init(writePinPosition)
-    writePinPosition()
+    await map.init(updateMapInfo)
+    updateMapInfo()
   }
 
   onMount(() => {
@@ -51,6 +53,8 @@
   <FloatingLabelInput style="outlined" bind:value={apiKey} on:change={init}>API key</FloatingLabelInput>
   <div id="map" class="mt-5"></div>
   <div class="mt-5 flex gap-3 items-center justify-center">
+    <Badge large color="green">Zoom</Badge>
+    <span>{zoom}</span>
     <Badge large color="blue">Lat</Badge>
     <span>{pin.lat}</span>
     <Badge large color="blue">Lng</Badge>

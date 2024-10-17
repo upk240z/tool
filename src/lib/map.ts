@@ -36,7 +36,7 @@ export default class Map {
     })
   }
 
-  public async init(onDragend: () => void) {
+  public async init(onChange: () => void) {
     const {Map} = await this.loader.importLibrary('maps')
     this._map = new Map(document.getElementById(this.elementId) as HTMLElement, this.option)
 
@@ -46,7 +46,8 @@ export default class Map {
       draggable: true,
     })
 
-    this.markerPin.addListener('dragend', onDragend)
+    this.markerPin.addListener('dragend', onChange)
+    this._map.addListener('zoom_changed', onChange)
   }
 
   public center() {

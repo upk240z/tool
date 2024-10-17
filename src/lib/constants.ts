@@ -11,6 +11,7 @@ export const MENU_LINKS = [
   {name: 'Fixed length data', href: '/fld', class: 'text-base'},
   {name: 'Bingo', href: '/bingo', class: 'text-base'},
   {name: 'Map', href: '/map', class: 'text-base'},
+  {name: 'Map(OSM)', href: '/osm', class: 'text-base'},
   {name: 'LINE rich menu', href: '/line/rich-menu', class: 'text-base'},
   {name: 'Client', href: '/client', class: 'text-base'},
 ]
