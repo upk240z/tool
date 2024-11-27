@@ -59,6 +59,9 @@ importers:
       flowbite-svelte-icons:
         specifier: ^1.5.0
         version: 1.5.0(svelte@4.2.15)(tailwind-merge@2.3.0)(tailwindcss@3.4.3(ts-node@10.9.2(@types/node@20.10.6)(typescript@5.4.5)))
+      iconv-lite:
+        specifier: ^0.6.3
+        version: 0.6.3
       js-base64:
         specifier: ^3.7.7
         version: 3.7.7
@@ -2874,6 +2877,10 @@ packages:
 
   iconv-lite@0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
+    engines: {node: '>=0.10.0'}
+
+  iconv-lite@0.6.3:
+    resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
     engines: {node: '>=0.10.0'}
 
   ieee754@1.2.1:
@@ -8304,6 +8311,10 @@ snapshots:
   human-signals@5.0.0: {}
 
   iconv-lite@0.4.24:
+    dependencies:
+      safer-buffer: 2.1.2
+
+  iconv-lite@0.6.3:
     dependencies:
       safer-buffer: 2.1.2
 

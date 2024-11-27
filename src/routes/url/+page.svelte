@@ -1,20 +1,30 @@
 <script lang="ts">
   import { Textarea } from 'flowbite-svelte'
   import ResultBox from '$lib/components/ResultBox.svelte'
+  import {encodeUrlWithEncoding, setMessage} from '$lib/utils'
 
   let encodeTarget = ''
   let encoded = ''
+  let encodedSJIS = ''
+  let encodedEuc = ''
   let decodeTarget = ''
   let decoded = ''
 
   $: if (encodeTarget.length > 0) {
     encoded = encodeURIComponent(encodeTarget)
+    encodedSJIS = encodeUrlWithEncoding(encodeTarget, 'Shift_JIS')
+    encodedEuc = encodeUrlWithEncoding(encodeTarget, 'EUC-JP')
   } else {
-    encoded = ''
+    encoded = encodedSJIS = encodedEuc = ''
   }
 
   $: if (decodeTarget.length > 0) {
-    decoded = decodeURIComponent(decodeTarget)
+    try {
+      decoded = decodeURIComponent(decodeTarget)
+    } catch (e) {
+      decoded = ''
+      setMessage(e.toString())
+    }
   } else {
     decoded = ''
   }
@@ -25,6 +35,8 @@
 <section>
   <Textarea rows="4" placeHolder="Encode target" bind:value={encodeTarget}/>
   <ResultBox label="Encoded" text={encoded}/>
+  <ResultBox label="Encoded(Shift-JIS)" text={encodedSJIS}/>
+  <ResultBox label="Encoded(EUC)" text={encodedEuc}/>
 </section>
 
 <hr class="my-5">

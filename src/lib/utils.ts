@@ -1,3 +1,4 @@
+import * as iconv from 'iconv-lite'
 import {toastMessage} from '$lib/store'
 
 export const setMessage = (message: string, ttl: number = 3000) => {
@@ -32,3 +33,27 @@ export const buildQuery = (params: {[i: string]: any}): string => {
 }
 
 export const prevent = (e: Event) => { e.preventDefault() }
+
+export const encodeUrlFromBuffer = (buffer: Buffer) => {
+  return Array.from(buffer)
+    .map(byte => {
+      if (
+        byte == 0x21 ||
+        byte == 0x2A ||
+        byte == 0x2D ||
+        byte == 0x2E ||
+        byte == 0x7E ||
+        byte == 0x5F ||
+        (0x27 <= byte && byte <= 0x29) ||
+        (0x41 <= byte && byte <= 0x5a) ||
+        (0x61 <= byte && byte <= 0x7a)
+      ) {
+        return String.fromCharCode(byte)
+      }
+      return `%${byte.toString(16).toUpperCase()}`
+    }).join('')
+}
+
+export const encodeUrlWithEncoding = (str: string, encoding: string) => {
+  return  encodeUrlFromBuffer(iconv.encode(str, encoding))
+}
