@@ -29,7 +29,7 @@ export const parseFile = (file: File): Promise<ParseResult> => {
   return new Promise((resolve, reject) => {
     reader.onload = () => {
       const allLines = reader.result as string
-      const lines = allLines.trim().split(/\r\n|\r|\n/)
+      const lines = allLines.replace(/(\r\n|\r|\n)$/, '').split(/\r\n|\r|\n/)
       const dataLength = lines[0].length;
       const messages: string[] = []
       const lineLengths: number[] = []
