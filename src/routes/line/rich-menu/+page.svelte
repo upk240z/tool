@@ -303,7 +303,7 @@
   </Modal>
 </form>
 
-<div class="fixed right-10 bottom-10 flex flex-col gap-2">
+<div class="fixed right-4 bottom-10 flex flex-col gap-2">
   <Button pill={true} color="yellow" class="!p-3" on:click={() => init()}>
     <RefreshOutline size="lg"/>
   </Button>
@@ -317,7 +317,7 @@
 
 <style lang="postcss">
   .menus {
-    @apply grid grid-cols-4 gap-3 items-center;
+    @apply grid grid-cols-4 gap-3 items-center pr-10;
     grid-template-columns: auto 3fr 1fr auto;
   }
 

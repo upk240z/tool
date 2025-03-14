@@ -50,7 +50,7 @@
 </div>
 
 {#if toast.length > 0}
-  <Toast color="green" class="fixed right-10 bottom-10">
+  <Toast color="green" class="fixed right-10 top-10">
     <svelte:fragment slot="icon">
       <CheckCircleSolid class="w-5 h-5" />
       <span class="sr-only">Check icon</span>
