@@ -18,7 +18,7 @@
   $: bracket = isArray ? ['[', ']'] : ['{', '}']
 </script>
 
-<span>
+<span class="text-xs">
   {#if key !== undefined}
     <span class="text-purple-700 font-medium">"{key}"</span>
     <span class="text-gray-500">: </span>
