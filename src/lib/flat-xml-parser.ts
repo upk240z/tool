@@ -53,7 +53,10 @@ export function useFlatXmlParser(delimiter = 'SERVICE_TYPE', groupName = 'servic
       items.push(currentItem);
     }
 
-    result[groupName] = items;
+    if (items.length > 0) {
+      result[groupName] = items;
+    }
+
     return result;
   }
 
@@ -81,11 +84,13 @@ export function useFlatXmlParser(delimiter = 'SERVICE_TYPE', groupName = 'servic
     const data = parse(content);
     const items = data[groupName] as ParsedItem[];
 
-    const indexed: Record<string, ParsedItem> = {};
-    for (const item of items) {
-      indexed[item[delimiter]] = item;
+    if (items) {
+      const indexed: Record<string, ParsedItem> = {};
+      for (const item of items) {
+        indexed[item[delimiter]] = item;
+      }
+      data[groupName] = indexed;
     }
-    data[groupName] = indexed;
 
     return data;
   }
