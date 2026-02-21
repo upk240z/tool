@@ -1,4 +1,6 @@
 <script lang="ts">
+  import {CaretRightSolid} from 'flowbite-svelte-icons'
+
   export let value: any
   export let key: string | undefined = undefined
   export let depth: number = 0
@@ -20,7 +22,9 @@
 
 <span class="text-xs">
   {#if key !== undefined}
-    <span class="text-purple-700 font-medium">"{key}"</span>
+    <span class="font-medium"
+          class:text-red-500={key === 'STATUS_SERVICE_AVAILABILITY'}
+          class:text-purple-500={key !== 'STATUS_SERVICE_AVAILABILITY'}>"{key}"</span>
     <span class="text-gray-500">: </span>
   {/if}
 
@@ -30,7 +34,7 @@
       on:click={toggle}
       aria-label={collapsed ? 'expand' : 'collapse'}
     >
-      <span class="text-xs mr-0.5">{collapsed ? '▶' : '▼'}</span>
+      <span class="text-sm mr-0.5" class:-rotate-90={collapsed}>▼</span>
     </button>
     <span class="text-gray-600">{bracket[0]}</span>
 
