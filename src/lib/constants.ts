@@ -4,6 +4,7 @@ export const MENU_LINKS = [
   {name: 'JSON parser', href: '/json', class: 'text-base'},
   {name: 'YAML parser', href: '/yaml', class: 'text-base'},
   {name: 'XML parser', href: '/xml', class: 'text-base'},
+  {name: 'Flat XML parser', href: '/flat-xml', class: 'text-base'},
   {name: 'URL encode/decode', href: '/url', class: 'text-base'},
   {name: 'Base64', href: '/base64', class: 'text-base'},
   {name: 'Crypt', href: '/crypt', class: 'text-base'},
