@@ -21,7 +21,7 @@
 </script>
 
 {#if text.length > 0}
-  <div class="flex flex-col gap-3 p-3 shadow rounded-lg mt-3">
+  <div class="flex flex-col gap-3 p-3 shadow rounded-lg border">
     <h5 class="font-medium">
       {label}
       <Button class="ml-2" on:click={() => copyClip(text)} size="sm">
