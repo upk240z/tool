@@ -39,7 +39,7 @@
   }
 
   const init = async () => {
-    if (url.length == 0) {
+    if (url.length == 0 || token.length == 0) {
       histories = []
       return
     }
@@ -54,8 +54,11 @@
   })
 
   onDestroy(() => {
-    if (url.length > 0 && token.length > 0) {
+    if (url.length > 0) {
       setItem('vacuum-url', url)
+    }
+
+    if (token.length > 0) {
       setItem('vacuum-token', token)
     }
   })
