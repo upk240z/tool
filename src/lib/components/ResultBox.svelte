@@ -1,6 +1,6 @@
 <script lang="ts">
   import {Button} from 'flowbite-svelte'
-  import { FileCopyOutline } from 'flowbite-svelte-icons'
+  import {FileCopyOutline, ExpandOutline, MinimizeOutline} from 'flowbite-svelte-icons'
   import {copyClip} from '$lib/utils'
   import JsonNode from '$lib/components/JsonNode.svelte'
 
@@ -18,19 +18,33 @@
       isJson = false
     }
   }
+
+  let signal: {n: number, expand: boolean} | undefined = undefined
+
+  function expandAll() {
+    signal = {n: (signal?.n ?? 0) + 1, expand: true}
+  }
+
+  function collapseAll() {
+    signal = {n: (signal?.n ?? 0) + 1, expand: false}
+  }
 </script>
 
 {#if text.length > 0}
   <div class="flex flex-col gap-3 p-3 shadow rounded-lg border">
-    <h5 class="font-medium">
+    <h5 class="font-medium inline-flex gap-3 items-center">
       {label}
       <Button class="ml-2" on:click={() => copyClip(text)} size="sm">
         <FileCopyOutline size="sm"/>
       </Button>
+      {#if isJson}
+        <Button color="light" size="xs" on:click={expandAll}><ExpandOutline size="sm"/></Button>
+        <Button color="light" size="xs" on:click={collapseAll}><MinimizeOutline size="sm"/></Button>
+      {/if}
     </h5>
     {#if isJson}
       <div class="border px-3 py-2 rounded-lg bg-blue-50 text-sm font-mono overflow-x-auto">
-        <JsonNode value={parsedJson} depth={0} />
+        <JsonNode value={parsedJson} depth={0} {signal} />
       </div>
     {:else}
       <div class="result-text">

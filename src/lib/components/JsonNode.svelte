@@ -1,15 +1,20 @@
 <script lang="ts">
-  import {CaretRightSolid} from 'flowbite-svelte-icons'
-
   export let value: any
   export let key: string | undefined = undefined
   export let depth: number = 0
+  export let signal: {n: number, expand: boolean} | undefined = undefined
 
   $: isObject = typeof value === 'object' && value !== null && !Array.isArray(value)
   $: isArray = Array.isArray(value)
   $: isComplex = isObject || isArray
 
-  let collapsed = depth > 2
+  let collapsed = depth > 0
+
+  let lastSignal = -1
+  $: if (signal && signal.n !== lastSignal) {
+    lastSignal = signal.n
+    collapsed = !signal.expand
+  }
 
   function toggle() {
     collapsed = !collapsed
@@ -47,7 +52,7 @@
       <div class="ml-4">
         {#each entries as [k, v], i}
           <div>
-            <svelte:self value={v} key={isObject ? k : undefined} depth={depth + 1} />
+            <svelte:self value={v} key={isObject ? k : undefined} depth={depth + 1} {signal} />
             {#if i < count - 1}<span class="text-gray-400">,</span>{/if}
           </div>
         {/each}
