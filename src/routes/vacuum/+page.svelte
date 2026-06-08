@@ -111,6 +111,10 @@
           <span class="bg-orange-500 px-2 py-1 rounded-lg text-white font-medium text-xs">Content-Type</span>
           <span class="text-orange-600">{history.contentType}</span>
         </span>
+        <span class="inline-flex gap-2 items-center">
+          <span class="bg-teal-500 px-2 py-1 rounded-lg text-white font-medium text-xs">Authorization</span>
+          <span class="text-teal-600">{history.authorization}</span>
+        </span>
         <ResultBox label="Parameters" text={JSON.stringify(history.parameters, null, 2)}/>
         <Button class="p-2 absolute top-[-0.5rem] right-[-0.5rem]" color="red" on:click={() => { deleteItem(index) }}>
           <TrashBinOutline/>
