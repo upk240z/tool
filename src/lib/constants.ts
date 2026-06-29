@@ -1,5 +1,6 @@
 export const MENU_LINKS = [
   {name: 'Home', href: '/', class: 'text-base'},
+  {name: 'Excel To Markdown', href: '/excel-to-markdown', class: 'text-base'},
   {name: 'JSON parser', href: '/json', class: 'text-base'},
   {name: 'YAML parser', href: '/yaml', class: 'text-base'},
   {name: 'Vacuum', href: '/vacuum', class: 'text-base'},
