@@ -1,0 +1,7 @@
+allowBuilds:
+  '@sveltejs/kit': false
+  esbuild: false
+  netlify-cli: false
+  sharp: false
+  svelte-preprocess: false
+  unix-dgram: false

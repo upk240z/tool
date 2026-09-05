@@ -3,6 +3,7 @@ export const MENU_LINKS = [
   {name: 'Excel To Markdown', href: '/excel-to-markdown', class: 'text-base'},
   {name: 'JSON parser', href: '/json', class: 'text-base'},
   {name: 'YAML parser', href: '/yaml', class: 'text-base'},
+  {name: 'Redocly', href: '/redocly', class: 'text-base'},
   {name: 'Vacuum', href: '/vacuum', class: 'text-base'},
   {name: 'Flat XML parser', href: '/flat-xml', class: 'text-base'},
   {name: 'Fixed length data', href: '/fld', class: 'text-base'},
