@@ -1,12 +1,18 @@
 <script lang="ts">
+  import {onMount} from 'svelte'
   import { Button, Textarea, Alert, FloatingLabelInput } from 'flowbite-svelte'
   import { InfoCircleOutline, DownloadOutline } from 'flowbite-svelte-icons'
   import YAML from 'yaml'
   import { downloadFile } from '$lib/utils'
+  import {getItem, setItem} from '$lib/store'
 
   let yamlText = ''
   let filename = 'redoc'
   let error = ''
+
+  onMount(() => {
+    yamlText = getItem('redocly-yaml', '')
+  })
 
   $: if (yamlText.length > 0) {
     try {
@@ -25,10 +31,10 @@
     error = ''
   }
 
-  const buildHtml = (spec: unknown): string => `<!DOCTYPE html>
+  const buildHtml = (spec: any): string => `<!DOCTYPE html>
 <html>
   <head>
-    <title>ReDoc</title>
+    <title>${spec?.info?.title ?? 'ReDoc'}</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>body { margin: 0; padding: 0; }</style>
@@ -50,6 +56,7 @@
 
     const spec = YAML.parse(yamlText)
     downloadFile(`${filename}.html`, buildHtml(spec), 'text/html')
+    setItem('redocly-yaml', yamlText)
   }
 </script>
 
